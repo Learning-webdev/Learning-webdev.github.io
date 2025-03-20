@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>second-page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sriracha&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #E5F9Fe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Sriracha', cursive;
+        }
+
+        .popup {
+            position: absolute;
+            font-size: 30px;
+            animation: popupAnimation 1s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes popupAnimation {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const colors = ['#D8BFD8', '#FFB6C1', '#F08080', '#ADD8E6'];
+        const messages = ['คิดถึง', 'คิดถึงอะ', 'คิดถึงจัง', 'คิดถึงน้า'];
+        const popupPositions = [];
+
+        function createPopup() {
+            const popup = document.createElement('div');
+            popup.classList.add('popup');
+            popup.textContent = messages[Math.floor(Math.random() * messages.length)];
+            popup.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+            let left, top;
+            let overlap;
+
+            do {
+                left = Math.random() * window.innerWidth;
+                top = Math.random() * window.innerHeight;
+                overlap = false;
+
+                for (let i = 0; i < popupPositions.length; i++) {
+                    const existingPopup = popupPositions[i];
+                    const dx = left - existingPopup.left;
+                    const dy = top - existingPopup.top;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 30) {
+                        overlap = true;
+                        break;
+                    }
+                }
+            } while (overlap);
+
+            popup.style.left = left + 'px';
+            popup.style.top = top + 'px';
+            document.body.appendChild(popup);
+
+            popupPositions.push({ left, top });
+
+            setTimeout(() => {
+                popup.remove();
+                popupPositions.shift();
+            }, 1500); // เปลี่ยนจาก 1000 เป็น 1500 เพื่อให้ช้าลง
+        }
+
+        setInterval(createPopup, 150); // เปลี่ยนจาก 100 เป็น 150 เพื่อให้ช้าลง
+    </script>
+</body>
+</html>
